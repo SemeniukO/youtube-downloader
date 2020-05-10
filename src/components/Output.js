@@ -28,14 +28,6 @@ class Output extends React.Component {
       this.setState(value);      
    }
 
-   updateHide = (value) => {
-      this.setState({
-         classNone: value.classNone,
-         loader: value.loader,
-         errLoad: value.errLoad
-      })
-   }
-
    download(url, qualityLabel, fullUrl) {
       if (qualityLabel === '360p') {
          return window.location.href = `http://localhost:3001/download360?URL=${url}&quality=${qualityLabel}`;
@@ -49,8 +41,7 @@ class Output extends React.Component {
       return (
          <div>
             <Input
-               updateData={this.updateData}
-               updateHide={this.updateHide}
+               updateData={this.updateData}               
                loader={this.state.loader}
                errLoad={this.state.errLoad}
             />

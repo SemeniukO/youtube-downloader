@@ -12,7 +12,7 @@ class Input extends React.Component {
    }
 
    handleClick(e) {
-      this.props.updateHide({
+      this.props.updateData({
          classNone: 'y__none',
          loader: '',
          errLoad: 'y__none',
@@ -24,11 +24,10 @@ class Input extends React.Component {
    sendURL(URL) {
       fetch(`http://localhost:3000/download?URL=${URL}`)
          .then(res => res.json())
-         .then(data => {
-            console.log(data);
+         .then(data => {            
             if (data.error) {               
                return (
-                  this.props.updateHide({
+                  this.props.updateData({
                      loader: 'y__none',
                      classNone: 'y__none',
                      errLoad: 'y__download',
