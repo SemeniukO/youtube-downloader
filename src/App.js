@@ -21,4 +21,16 @@ class App extends React.Component {
   }
 }
 
+// component={()=>(
+//   <Output
+//   url={this.state.url}
+//   info={this.state.info}
+//   video={this.state.video}
+//   className={this.state.classNone}
+//   loader={this.state.loader}
+//   errLoad={this.state.errLoad}
+//   updateData={this.updateData}
+//   />)
+//   } />
+
 export default App;
