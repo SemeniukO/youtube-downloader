@@ -1,95 +1,76 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-class Input extends React.Component {
-   constructor(props) {
-      super(props);
-      this.textInput = React.createRef();
-      this.handleClick = this.handleClick.bind(this);
-      this.clearUrl = this.clearUrl.bind(this);
-      this.state = {
-      };
-   }
+const input = (props) => {
 
-   handleClick(e) {
-      this.props.updateData({
-         classNone: 'y__none',
-         loader: '',
-         errLoad: 'y__none',
+   const handleClick = () => {
+      props.updateData({
+         classNone: false,
+         loader: true,
+         errLoad: false,
       })
-      e.preventDefault();
-      this.sendURL(this.textInput.value);
+      sendURL(props.url);
    }
 
-   sendURL(URL) {
+   const sendURL = (URL) => {
       fetch(`http://localhost:3000/download?URL=${URL}`)
          .then(res => res.json())
-         .then(data => {            
-            if (data.error) {               
+         .then(data => {
+            console.log(data)
+            if (data.error) {
                return (
-                  this.props.updateData({
-                     loader: 'y__none',
-                     classNone: 'y__none',
-                     errLoad: 'y__download',
+                  props.updateData({
+                     classNone: false,
+                     loader: false,
+                     errLoad: true,
                   })
                )
             }
             if (data.time === '0') {
                return (
-                  this.props.updateData({
-                     loader: 'y__none',
-                     classNone: 'y__none',
-                     errLoad: 'y__download',
+                  props.updateData({
+                     classNone: false,
+                     loader: false,
+                     errLoad: true,
                   })
                )
             }
-            this.props.updateData({
-               hits: data,
+            props.updateData({
+               info: data,
                video: data.video,
-               classNone: 'zoomIn',
-               loader: 'y__none'
+               classNone: true,
+               loader: false
             });
          })
    }
 
-   clearUrl(e) {
-      e.preventDefault();
-      this.textInput.value = '';
-   }
-
-   selectText = (event) => event.target.select();
-
-   render() {
-      return (
-         <div className="app__wraper">
-            <h1 className="hero-header">Download Video from YouTube</h1>
-            <div className='app__downloader'>
-               <div className="app__top">
-                  <div className='app__url'>
-                     <input
-                        type="text"
-                        placeholder="Paste link here..."
-                        ref={(input) => { this.textInput = input; }}
-                        onClick={this.selectText}
-                     />
-                     <div className="app__clear" >
-                        <button onClick={this.clearUrl}>&times;</button>
-                     </div>
-                  </div>
-                  <button className='button' onClick={this.handleClick}>Click</button>
-               </div>
-               <div className='app__term'>
-                  <div>By using our service you are accepting our <Link to='/terms-of-service'>Terms of Service</Link></div>
-               </div>
-               <div className={this.props.errLoad}> Sorry, we have some error with your link</div>
-               <div className={this.props.loader}>
-                  <div className='loader__block'>
-                     <div className="loader"></div>
+   return (
+      <div className="app__wraper">
+         <h1 className="hero-header">Download Video from YouTube</h1>
+         <div className='app__downloader'>
+            <div className="app__top">
+               <div className='app__url'>
+                  <input
+                     type="text"
+                     placeholder="Paste link here..."
+                     value={props.url}
+                     onClick={(event) => event.target.select()}
+                     onChange={(event) => props.updateData({ url: event.target.value })}
+                  />
+                  <div className="app__clear" >
+                     <button onClick={(event) => props.updateData({ url: '' })}>&times;</button>
                   </div>
                </div>
+               <button className='button' onClick={handleClick}>Click</button>
             </div>
+            <div className='app__term'>
+               <div>By using our service you are accepting our <Link to='/terms-of-service'>Terms of Service</Link></div>
+            </div>
+            {props.errLoad ? <div className='y__download'> Sorry, we have some error with your link</div> : null}
+            {props.loader ? <div className='loader__block'><div className="loader"></div></div> : null}
          </div>
-      )
-   }
+      </div>
+   )
+
 }
-export default Input;
+export default input;

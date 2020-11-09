@@ -6,11 +6,12 @@ class Output extends React.Component {
    constructor(props) {
       super(props);
       this.state = {
-         hits: [],
+         url:'',
+         info: [],
          video: [],
-         classNone: 'y__none',
-         loader: 'y__none',
-         errLoad: 'y__none',
+         classNone: false,
+         loader: false,
+         errLoad: false,
       };
    }
 
@@ -32,36 +33,38 @@ class Output extends React.Component {
       if (qualityLabel === '360p') {
          return window.location.href = `http://localhost:3001/download360?URL=${url}&quality=${qualityLabel}`;
       }
-      window.location.href = fullUrl + '&title=' + this.state.hits.title.replace("#", "");
+      window.location.href = fullUrl + '&title=' + this.state.info.title.replace("#", "");
    }
 
    render() {
-      const { hits } = this.state;
-      const { video } = this.state;
+      const { info, video } = this.state;
       return (
          <div>
             <Input
+               url={this.state.url}
                updateData={this.updateData}               
                loader={this.state.loader}
                errLoad={this.state.errLoad}
             />
-            <div className={this.state.classNone}>
+            {
+               this.state.classNone ?
+               <div className='zoomIn'>
                <div className='y__download '>
                   <div className='y__img'>
                      <img
-                        src={hits.thumbnail}
-                        alt={hits.title}>
+                        src={info.thumbnail}
+                        alt={info.title}>
                      </img>
                   </div>
                   <div className='y__info'>
-                     <div className="y__title">{hits.title}</div>
-                     <div className="y__time">{this.time(hits.time)}</div>
+                     <div className="y__title">{info.title}</div>
+                     <div className="y__time">{this.time(info.time)}</div>
                      <div className="y__downlist">
                         <ul className='y__ulist'>
-                           {video.map(hit =>
-                              <li key={hit.url} className='y__li-list'>
-                                 <span className='button__lires'>{hit.qualityLabel}</span>                              
-                                 <div className='button__li' onClick={this.download.bind(this,hits.url,hit.qualityLabel,hit.url)}>Download</div>
+                           {video.map(info =>
+                              <li key={info.url} className='y__li-list'>
+                                 <span className='button__lires'>{info.qualityLabel}</span>                              
+                                 <div className='button__li' onClick={this.download.bind(this,this.state.url,info.qualityLabel,info.url)}>Download</div>
                               </li>
                            )}
                         </ul>
@@ -69,6 +72,8 @@ class Output extends React.Component {
                   </div>
                </div>
             </div>
+            : null
+            }
             <InfoDownload />
          </div>
       )
