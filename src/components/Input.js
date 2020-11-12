@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from "react-router-dom";
 
-const input = (props) => {
+const Input = (props) => {
 
    const handleClick = () => {
       props.updateData({
@@ -73,4 +73,4 @@ const input = (props) => {
    )
 
 }
-export default input;
+export default Input;
